@@ -118,4 +118,41 @@ public class FareCalculatorServiceTest {
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket),
                 "Une exception doit être levée si l'heure d'entrée est dans le futur.");
     }
+    @Test
+    public void calculateFareCarWithDiscount() {
+
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000)); // il y a 1 heure
+        Date outTime = new Date();
+
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+
+
+        fareCalculatorService.calculateFare(ticket, true);
+
+
+        assertEquals(1.425, ticket.getPrice(), 0.01);
+    }
+
+    @Test
+    public void calculateFareBikeWithDiscount() {
+
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000)); // il y a 1 heure
+        Date outTime = new Date();
+
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+
+
+        fareCalculatorService.calculateFare(ticket, true);
+
+
+        assertEquals(0.95, ticket.getPrice(), 0.01);
+    }
 }
